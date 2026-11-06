@@ -1,0 +1,21 @@
+name: Verify modules
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      # Uses the live api.osv.dev, pypi.org and registry.npmjs.org on purpose: this is the check that
+      # the course still matches reality.
+      - run: python verify.py
